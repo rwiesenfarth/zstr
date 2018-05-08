@@ -12,7 +12,7 @@
 #include <cassert>
 #include <fstream>
 #include <sstream>
-#include <zlib.h>
+#include <openMVG/third_party/zlib/zlib.h>
 #include "strict_fstream.hpp"
 
 namespace zstr
@@ -231,6 +231,7 @@ public:
         : sbuf_p(_sbuf_p),
           zstrm_p(new detail::z_stream_wrapper(false, _level, _use_gzip)),
           buff_size(_buff_size),
+          flag_allow_empty_sync(true)
     {
         assert(sbuf_p);
         in_buff = new char [buff_size];
@@ -242,6 +243,15 @@ public:
     ostreambuf(ostreambuf &&) = default;
     ostreambuf & operator = (const ostreambuf &) = delete;
     ostreambuf & operator = (ostreambuf &&) = default;
+
+    bool allow_empty_sync() const
+    {
+        return flag_allow_empty_sync;
+    }
+    void set_allow_empty_sync(bool value)
+    {
+        flag_allow_empty_sync = value;
+    }
 
     int deflate_loop(int flush)
     {
@@ -304,8 +314,11 @@ public:
         // then, call deflate asking to finish the zlib stream
         zstrm_p->next_in = nullptr;
         zstrm_p->avail_in = 0;
-        if (deflate_loop(Z_FINISH) != 0) return -1;
-        deflateReset(zstrm_p);
+        if(flag_allow_empty_sync || (zstrm_p->total_in > 0))
+        {
+            if (deflate_loop(Z_FINISH) != 0) return -1;
+            deflateReset(zstrm_p);
+        }
         return 0;
     }
 private:
@@ -314,6 +327,7 @@ private:
     char * out_buff;
     detail::z_stream_wrapper * zstrm_p;
     std::size_t buff_size;
+    bool flag_allow_empty_sync;
 
     static const std::size_t default_buff_size = (std::size_t)1 << 20;
 }; // class ostreambuf

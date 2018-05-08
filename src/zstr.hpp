@@ -64,7 +64,7 @@ class z_stream_wrapper
     : public z_stream
 {
 public:
-    z_stream_wrapper(bool _is_input = true, int _level = Z_DEFAULT_COMPRESSION)
+    z_stream_wrapper(bool _is_input = true, int _level = Z_DEFAULT_COMPRESSION, bool _use_gzip = true)
         : is_input(_is_input)
     {
         this->zalloc = Z_NULL;
@@ -79,7 +79,7 @@ public:
         }
         else
         {
-            ret = deflateInit2(this, _level, Z_DEFLATED, 15+16, 8, Z_DEFAULT_STRATEGY);
+            ret = deflateInit2(this, _level, Z_DEFLATED, 15 + (_use_gzip ? 16 : 0), 8, Z_DEFAULT_STRATEGY);
         }
         if (ret != Z_OK) throw Exception(this, ret);
     }
@@ -227,10 +227,10 @@ class ostreambuf
 {
 public:
     ostreambuf(std::streambuf * _sbuf_p,
-               std::size_t _buff_size = default_buff_size, int _level = Z_DEFAULT_COMPRESSION)
+               std::size_t _buff_size = default_buff_size, int _level = Z_DEFAULT_COMPRESSION, bool _use_gzip = true)
         : sbuf_p(_sbuf_p),
-          zstrm_p(new detail::z_stream_wrapper(false, _level)),
-          buff_size(_buff_size)
+          zstrm_p(new detail::z_stream_wrapper(false, _level, _use_gzip)),
+          buff_size(_buff_size),
     {
         assert(sbuf_p);
         in_buff = new char [buff_size];

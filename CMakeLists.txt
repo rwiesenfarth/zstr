@@ -29,7 +29,7 @@ target_include_directories(zstr INTERFACE
   $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/src>
   $<INSTALL_INTERFACE:include/zstr>
 )
-target_link_libraries(zstr INTERFACE zlib)
+target_link_libraries(zstr INTERFACE OpenMVG::openMVG_zlib)
 
 install(TARGETS zstr EXPORT zstrConfig)
 install(FILES ${HEADERS} DESTINATION include/zstr)

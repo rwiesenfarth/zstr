@@ -13,9 +13,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 list(APPEND CMAKE_PREFIX_PATH "${PROJECT_SOURCE_DIR}/../../deploy/")
 
 ##
-##  OpenMVG (use prebuild libraries)
+##  zlib (use prebuild libraries)
 ##
-find_package(OpenMVG CONFIG REQUIRED)
+find_package(Zlib CONFIG REQUIRED)
 
 set(HEADERS
   src/strict_fstream.hpp
@@ -29,7 +29,7 @@ target_include_directories(zstr INTERFACE
   $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/src>
   $<INSTALL_INTERFACE:include/zstr>
 )
-target_link_libraries(zstr INTERFACE OpenMVG::openMVG_zlib)
+target_link_libraries(zstr INTERFACE Zlib::zlibstatic)
 
 install(TARGETS zstr EXPORT zstrConfig)
 install(FILES ${HEADERS} DESTINATION include/zstr)

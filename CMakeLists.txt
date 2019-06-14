@@ -15,7 +15,7 @@ list(APPEND CMAKE_PREFIX_PATH "${PROJECT_SOURCE_DIR}/../../deploy/")
 ##
 ##  zlib (use prebuild libraries)
 ##
-find_package(Zlib CONFIG REQUIRED)
+find_package(zlib CONFIG REQUIRED)
 
 set(HEADERS
   src/strict_fstream.hpp

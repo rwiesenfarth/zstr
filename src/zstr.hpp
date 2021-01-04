@@ -349,7 +349,7 @@ public:
         if(flag_allow_empty_sync || (zstrm_p->total_in > 0))
         {
             if (deflate_loop(Z_FINISH) != 0) return -1;
-            deflateReset(zstrm_p);
+            deflateReset(zstrm_p.get());
         }
         return 0;
     }

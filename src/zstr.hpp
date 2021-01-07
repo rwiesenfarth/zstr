@@ -262,7 +262,7 @@ public:
                std::size_t _buff_size = default_buff_size, int _level = Z_DEFAULT_COMPRESSION, int _window_bits = 0, bool _use_gzip = true)
         : sbuf_p(_sbuf_p),
           zstrm_p(std::make_unique<detail::z_stream_wrapper>(false, _level, _window_bits, _use_gzip)),
-          buff_size(_buff_size)
+          buff_size(_buff_size),
           flag_allow_empty_sync(true)
     {
         assert(sbuf_p);

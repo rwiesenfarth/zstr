@@ -20,7 +20,7 @@ find_package(zlib CONFIG REQUIRED)
 set(HEADERS
   src/strict_fstream.hpp
   src/zstr.hpp
-  src/zstr_make_unique_polyfill.hpp
+  src/zstr_make_unique_polyfill.h
 )
 
 
